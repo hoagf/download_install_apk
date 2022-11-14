@@ -10,8 +10,6 @@ class DownloadInstallApk {
 
   Stream<Event>? _progressStream;
 
-  Stream<Event>? _installStream;
-
   Stream<Event> execute(String url) {
     final StreamController<Event> controller =
         StreamController<Event>.broadcast();
@@ -36,22 +34,19 @@ class DownloadInstallApk {
   Stream<Event> install(String filePath) {
     final StreamController<Event> controller =
         StreamController<Event>.broadcast();
-    if (_installStream == null) {
-      _installChanel.receiveBroadcastStream(
-        <dynamic, dynamic>{
-          'path': filePath,
-        },
-      ).listen((dynamic event) {
-        final Event otaEvent = _toEvent(event.cast<String>());
-        controller.add(otaEvent);
-      }).onError((Object error) {
-        if (error is PlatformException) {
-          controller.add(_toEvent(<String?>[error.code, error.message]));
-        }
-      });
-      _installStream = controller.stream;
-    }
-    return _installStream!;
+    _installChanel.receiveBroadcastStream(
+      <dynamic, dynamic>{
+        'path': filePath,
+      },
+    ).listen((dynamic event) {
+      final Event otaEvent = _toEvent(event.cast<String>());
+      controller.add(otaEvent);
+    }).onError((Object error) {
+      if (error is PlatformException) {
+        controller.add(_toEvent(<String?>[error.code, error.message]));
+      }
+    });
+    return controller.stream;
   }
 
   Event _toEvent(List<String?> event) {

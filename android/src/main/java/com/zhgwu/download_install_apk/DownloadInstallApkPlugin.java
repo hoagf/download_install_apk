@@ -31,7 +31,11 @@ public class DownloadInstallApkPlugin implements FlutterPlugin, EventChannel.Str
             @Override
             public void onListen(Object arguments, EventChannel.EventSink events) {
                 Log.d(TAG, "INSTALL OPENED");
-                InstallApk.install(context, new File(((Map) arguments).get(INSTALL_PATH).toString()), events);
+                try{
+                    InstallApk.install(context, new File(((Map) arguments).get(INSTALL_PATH).toString()), events);
+                }catch (Exception e){
+                    Log.d(TAG, "onListen: "+e);
+                }
             }
 
             @Override
