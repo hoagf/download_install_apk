@@ -16,7 +16,7 @@ public class InstallApk {
     static public void install(Context context, File downloadedFile, EventChannel.EventSink progressSink) {
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri apkUri = FileProvider.getUriForFile(context, context.getPackageName() + ".ota_update_provider", downloadedFile);
+            Uri apkUri = FileProvider.getUriForFile(context, context.getPackageName() + ".download_install_apk", downloadedFile);
             intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
             intent.setData(apkUri);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
