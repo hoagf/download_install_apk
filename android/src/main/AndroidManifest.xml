@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.zhgwu.download_install_apk">
-    <permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <permission android:name="android.permission.INSTALL_PACKAGES"
-        tools:ignore="ProtectedPermissions" />
+
 </manifest>
