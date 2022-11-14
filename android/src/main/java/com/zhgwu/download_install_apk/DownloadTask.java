@@ -160,33 +160,13 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
                 }
                 return;
             }
-            executeInstallation(file);
+            InstallApk.install(context, file, progressSink);
         }else {
             progressSink.error("" + DOWNLOAD_ERROR.ordinal(), result, null);
         }
     }
 
 
-    private void executeInstallation(File downloadedFile) {
-        Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri apkUri = FileProvider.getUriForFile(context, context.getPackageName() + ".ota_update_provider", downloadedFile);
-            intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
-            intent.setData(apkUri);
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        } else {
-            intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        }
-        //SEND INSTALLING EVENT
-        if (progressSink != null) {
-            context.startActivity(intent);
-            progressSink.success(Arrays.asList("" + DownloadInstallApkPlugin.Status.INSTALLING.ordinal(), ""));
-            progressSink.endOfStream();
-            progressSink = null;
-        }
-    }
+
 
 }

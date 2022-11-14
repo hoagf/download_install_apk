@@ -5,7 +5,12 @@ import 'package:flutter/services.dart';
 class DownloadInstallApk {
   static const EventChannel _progressChannel =
       EventChannel('com.zhgwu.download.install.apk');
+  static const EventChannel _installChanel =
+      EventChannel('com.zhgwu.install.apk');
+
   Stream<Event>? _progressStream;
+
+  Stream<Event>? _installStream;
 
   Stream<Event> execute(String url) {
     final StreamController<Event> controller =
@@ -26,6 +31,27 @@ class DownloadInstallApk {
       _progressStream = controller.stream;
     }
     return _progressStream!;
+  }
+
+  Stream<Event> install(String filePath) {
+    final StreamController<Event> controller =
+        StreamController<Event>.broadcast();
+    if (_installStream == null) {
+      _installChanel.receiveBroadcastStream(
+        <dynamic, dynamic>{
+          'path': filePath,
+        },
+      ).listen((dynamic event) {
+        final Event otaEvent = _toEvent(event.cast<String>());
+        controller.add(otaEvent);
+      }).onError((Object error) {
+        if (error is PlatformException) {
+          controller.add(_toEvent(<String?>[error.code, error.message]));
+        }
+      });
+      _installStream = controller.stream;
+    }
+    return _installStream!;
   }
 
   Event _toEvent(List<String?> event) {

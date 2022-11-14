@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
 import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -14,6 +15,7 @@ import io.flutter.plugin.common.PluginRegistry;
 public class DownloadInstallApkPlugin implements FlutterPlugin, EventChannel.StreamHandler {
     //CONSTANTS
     private static final String ARG_URL = "url";
+    private static final String INSTALL_PATH = "path";
     public static final String TAG = "UpdatePlugin";
     //BASIC PLUGIN STATE
     private Context context;
@@ -25,6 +27,18 @@ public class DownloadInstallApkPlugin implements FlutterPlugin, EventChannel.Str
     private void initialize(Context context, BinaryMessenger messanger) {
         final EventChannel progressChannel = new EventChannel(messanger, "com.zhgwu.download.install.apk");
         progressChannel.setStreamHandler(this);
+        new EventChannel(messanger, "com.zhgwu.install.apk").setStreamHandler(new EventChannel.StreamHandler() {
+            @Override
+            public void onListen(Object arguments, EventChannel.EventSink events) {
+                Log.d(TAG, "INSTALL OPENED");
+                InstallApk.install(context, new File(((Map) arguments).get(INSTALL_PATH).toString()), events);
+            }
+
+            @Override
+            public void onCancel(Object arguments) {
+                Log.d(TAG, "INSTALL CLOSED");
+            }
+        });
         this.context = context;
     }
 
