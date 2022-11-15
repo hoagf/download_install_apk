@@ -1,15 +1,47 @@
 # download_install_apk
 
-A new Flutter project.
+[![pub package](https://img.shields.io/pub/v/download_install_apk.svg)](https://pub.dev/packages/download_install_apk)
 
-## Getting Started
+Download and install apk file
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+> Note: Only support Android
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Usage
 
+To use this plugin, add `download_install_apk` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
+### Example
+
+
+#### Add install permission to AndroidManifest.xml
+
+
+```xml
+<manifest>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission  android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+   
+</manifest>
+```
+
+#### Install apk
+```dart
+DownloadInstallApk()
+    .install(apkFilePath, )
+    .listen((event) {
+            log(event);
+        }
+    );
+```
+
+
+#### Download and Install apk
+```dart
+DownloadInstallApk()
+    .execute('url')
+    .listen((event) {
+            logger.d(event);
+        }
+    );
+```
