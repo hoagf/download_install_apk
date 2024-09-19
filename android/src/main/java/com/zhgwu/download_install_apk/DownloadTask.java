@@ -55,7 +55,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
         OutputStream output = null;
         HttpsURLConnection connection = null;
         String[] urlSplit = sUrl[0].split("/");
-        fileName = urlSplit[urlSplit.length-1];
+        fileName = urlSplit[urlSplit.length-1]+".apk";
 
 
         try {
